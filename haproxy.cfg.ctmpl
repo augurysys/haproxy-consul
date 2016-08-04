@@ -1,0 +1,20 @@
+global
+  maxconn 256
+
+defaults
+  timeout connect 5s
+  timeout client 60s
+  timeout server 60s
+
+listen http-in
+  mode http
+  balance roundrobin
+  option allbackups
+  
+  bind *:{{env "PORT"}}
+  
+  {{with env "SERVICE_NAME"}}
+  {{range service .}}
+  server {{.Name}} {{.Address}}:{{.Port}} check maxconn 32
+  {{end}}
+  {{end}} 
