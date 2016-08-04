@@ -7,7 +7,7 @@ defaults
   timeout server 60s
 
 listen http-in
-  mode http
+  mode {{or (env "MODE") http}}
   balance roundrobin
   option allbackups
   
